@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Simple Parameters on Block Script"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

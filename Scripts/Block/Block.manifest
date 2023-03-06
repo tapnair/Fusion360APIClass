@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Basic Script to create a block"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
