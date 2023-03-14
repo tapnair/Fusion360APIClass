@@ -153,6 +153,8 @@ class MyCommandExecuteHandler(adsk.core.CommandEventHandler):
 
     def notify(self, args):
         try:
+
+            # Call this function when a user clicks “OK” button
             command_execute(args)
 
         except:

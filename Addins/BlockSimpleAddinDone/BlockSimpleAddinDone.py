@@ -104,10 +104,12 @@ def command_execute(args: adsk.core.CommandEventArgs):
 # This function is called when the user clicks your button in the Fusion UI and is used to create the input dialog
 def command_created(args: adsk.core.CommandEventArgs):
     inputs = args.command.commandInputs
+
     # Create a value input field and set the default using 1 unit of the default length unit.
     default_length_units = app.activeProduct.unitsManager.defaultLengthUnits
     default_value = adsk.core.ValueInput.createByString('1')
 
+    # Define three value inputs to capture length, width and height
     inputs.addValueInput('length_input', 'Length', default_length_units, default_value)
     inputs.addValueInput('width_input', 'Width', default_length_units, default_value)
     inputs.addValueInput('height_input', 'Height', default_length_units, default_value)
