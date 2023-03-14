@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"bc2c275c-9093-40a6-9186-ed5d19fe4d58",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"A bare-bones sample to create a button in the UI that executes some script"
+	},
+	"version":	"1.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

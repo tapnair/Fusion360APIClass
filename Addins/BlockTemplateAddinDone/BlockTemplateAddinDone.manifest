@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"540d5af0-506d-4357-bb28-99f18625dc83",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Completed Block Addin for Fusion 360 API Class"
+	},
+	"version":	"1.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

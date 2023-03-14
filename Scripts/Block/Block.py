@@ -22,10 +22,10 @@ def run(context):
 
         # Get reference to the sketchs and plane
         sketches = root_comp.sketches
-        xyPlane = root_comp.xYConstructionPlane
+        xy_plane = root_comp.xYConstructionPlane
 
         # Create a new sketch and get lines reference
-        sketch = sketches.add(xyPlane)
+        sketch = sketches.add(xy_plane)
         lines = sketch.sketchCurves.sketchLines
 
         # Use autodesk methods to create input geometry
