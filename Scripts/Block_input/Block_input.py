@@ -60,7 +60,7 @@ def run(context):
         extrude_input = extrudes.createInput(profile, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
 
         # Define that the extent is a distance extent of 1 cm
-        distance = adsk.core.ValueInput.createByReal(1)
+        distance = adsk.core.ValueInput.createByReal(height)
 
         # Define the direction for the extrude feature to be in the positive direction
         direction = adsk.fusion.ExtentDirections.PositiveExtentDirection
