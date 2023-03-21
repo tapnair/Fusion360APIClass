@@ -26,7 +26,7 @@ COMMAND_BESIDE_ID = 'ScriptsManagerCommand'
 # Resource location for command icons, here we assume a sub folder in this directory named "resources".
 ICON_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', '')
 
-# Local list of event handlers used to maintain a referenceso
+# Local list of event handlers used to maintain a references
 # they are not released and garbage collected.
 local_handlers = []
 
