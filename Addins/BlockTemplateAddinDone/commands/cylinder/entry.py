@@ -1,4 +1,5 @@
 import adsk.core
+import adsk.fusion
 import os
 from ...lib import fusion360utils as futil
 from ... import config
@@ -7,9 +8,9 @@ ui = app.userInterface
 
 
 # TODO *** Specify the command identity information. ***
-CMD_ID = f'{config.COMPANY_NAME}_{config.ADDIN_NAME}_cmdDialog'
-CMD_NAME = 'Command Dialog Sample'
-CMD_Description = 'A Fusion 360 Add-in Command with a dialog'
+CMD_ID = f'{config.COMPANY_NAME}_{config.ADDIN_NAME}_cylinder_command'
+CMD_NAME = 'Cylinder'
+CMD_Description = 'A Fusion 360 Add-in Command to create a Cylinder'
 
 # Specify that the command will be promoted to the panel.
 IS_PROMOTED = True
@@ -78,21 +79,17 @@ def command_created(args: adsk.core.CommandCreatedEventArgs):
     # https://help.autodesk.com/view/fusion360/ENU/?contextId=CommandInputs
     inputs = args.command.commandInputs
 
-    # TODO Define the dialog for your command by adding different inputs to the command.
-
-    # Create a simple text box input.
-    inputs.addTextBoxCommandInput('text_box', 'Some Text', 'Enter some text.', 1, False)
-
     # Create a value input field and set the default using 1 unit of the default length unit.
-    defaultLengthUnits = app.activeProduct.unitsManager.defaultLengthUnits
+    default_length_units = app.activeProduct.unitsManager.defaultLengthUnits
     default_value = adsk.core.ValueInput.createByString('1')
-    inputs.addValueInput('value_input', 'Some Value', defaultLengthUnits, default_value)
 
-    # TODO Connect to the events that are needed by this command.
+    # Define three value inputs to capture length, width and height
+    inputs.addValueInput('radius_input', 'Radius', default_length_units, default_value)
+    inputs.addValueInput('height_input', 'Height', default_length_units, default_value)
+
+    # Add relevant events
     futil.add_handler(args.command.execute, command_execute, local_handlers=local_handlers)
-    futil.add_handler(args.command.inputChanged, command_input_changed, local_handlers=local_handlers)
     futil.add_handler(args.command.executePreview, command_preview, local_handlers=local_handlers)
-    futil.add_handler(args.command.validateInputs, command_validate_input, local_handlers=local_handlers)
     futil.add_handler(args.command.destroy, command_destroy, local_handlers=local_handlers)
 
 
@@ -102,18 +99,11 @@ def command_execute(args: adsk.core.CommandEventArgs):
     # General logging for debug.
     futil.log(f'{CMD_NAME} Command Execute Event')
 
-    # TODO ******************************** Your code here ********************************
-
     # Get a reference to your command's inputs.
     inputs = args.command.commandInputs
-    text_box: adsk.core.TextBoxCommandInput = inputs.itemById('text_box')
-    value_input: adsk.core.ValueCommandInput = inputs.itemById('value_input')
 
-    # Do something interesting
-    text = text_box.text
-    expression = value_input.expression
-    msg = f'Your text: {text}<br>Your value: {expression}'
-    ui.messageBox(msg)
+    # Make the block, this is redundant if you were to set the preview result to be valid.
+    make_cylinder(inputs)
 
 
 # This event handler is called when the command needs to compute a new preview in the graphics window.
@@ -122,32 +112,13 @@ def command_preview(args: adsk.core.CommandEventArgs):
     futil.log(f'{CMD_NAME} Command Preview Event')
     inputs = args.command.commandInputs
 
+    # Preview the block
+    make_cylinder(inputs)
 
-# This event handler is called when the user changes anything in the command dialog
-# allowing you to modify values of other inputs based on that change.
-def command_input_changed(args: adsk.core.InputChangedEventArgs):
-    changed_input = args.input
-    inputs = args.inputs
+    # Optionally set the preview results as "valid"
+    # This will bypass the redundant call in command_execute
+    # args.isValidResult = True
 
-    # General logging for debug.
-    futil.log(f'{CMD_NAME} Input Changed Event fired from a change to {changed_input.id}')
-
-
-# This event handler is called when the user interacts with any of the inputs in the dialog
-# which allows you to verify that all of the inputs are valid and enables the OK button.
-def command_validate_input(args: adsk.core.ValidateInputsEventArgs):
-    # General logging for debug.
-    futil.log(f'{CMD_NAME} Validate Input Event')
-
-    inputs = args.inputs
-    
-    # Verify the validity of the input values. This controls if the OK button is enabled or not.
-    valueInput = inputs.itemById('value_input')
-    if valueInput.value >= 0:
-        args.areInputsValid = True
-    else:
-        args.areInputsValid = False
-        
 
 # This event handler is called when the command terminates.
 def command_destroy(args: adsk.core.CommandEventArgs):
@@ -156,3 +127,62 @@ def command_destroy(args: adsk.core.CommandEventArgs):
 
     global local_handlers
     local_handlers = []
+
+
+def make_cylinder(inputs: adsk.core.CommandInputs):
+
+    # Get the command inputs
+    radius_input = adsk.core.ValueCommandInput.cast(inputs.itemById('radius_input'))
+    height_input = adsk.core.ValueCommandInput.cast(inputs.itemById('height_input'))
+
+    # Get the values from the command inputs
+    radius = radius_input.value
+    height = height_input.value
+
+    #  Get the active Document
+    document = adsk.core.Document.cast(app.activeDocument)
+
+    #  Get the design
+    #  The "cast" is to enable type hints to work better
+    design = adsk.fusion.Design.cast(document.products.itemByProductType('DesignProductType'))
+
+    # Get reference to the root component
+    root_comp = design.rootComponent
+
+    # Get reference to the sketches and plane
+    sketches = root_comp.sketches
+    xy_plane = root_comp.xYConstructionPlane
+
+    # Create a new sketch and get lines reference
+    sketch = sketches.add(xy_plane)
+    circles = sketch.sketchCurves.sketchCircles
+
+    # Use autodesk methods to create input geometry
+    point0 = adsk.core.Point3D.create(0, 0, 0)
+
+    # Create lines
+    circles.addByCenterRadius(point0, radius)
+
+    # Get the profile defined by the circle
+    profile = sketch.profiles.item(0)
+
+    # Get the extrude features Collection for the root component
+    extrudes = root_comp.features.extrudeFeatures
+
+    # Create an extrusion input
+    extrude_input = extrudes.createInput(profile, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+
+    # Define that the extent is a distance extent of 1 cm
+    distance = adsk.core.ValueInput.createByReal(height)
+
+    # Define the direction for the extrude feature to be in the positive direction
+    direction = adsk.fusion.ExtentDirections.PositiveExtentDirection
+
+    # Create a distance extent object
+    distance_extent_definition = adsk.fusion.DistanceExtentDefinition.create(distance)
+
+    # Set the extrude feature to be single direction
+    extrude_input.setOneSideExtent(distance_extent_definition, direction)
+
+    # Create the extrusion
+    extrudes.add(extrude_input)
