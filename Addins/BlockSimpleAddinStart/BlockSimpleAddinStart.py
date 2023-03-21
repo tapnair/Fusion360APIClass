@@ -13,7 +13,7 @@ create_handlers = []
 cmd_handlers = []
 
 # Specify the command identity information.
-CMD_ID = f'BLOCK_SIMPLE_ADDIN_START'
+CMD_ID = 'BLOCK_SIMPLE_ADDIN_START'
 CMD_NAME = 'Make a Block'
 CMD_Description = 'A Fusion 360 Add-in Command to make a block'
 
@@ -48,6 +48,7 @@ def command_created(args: adsk.core.CommandEventArgs):
 
 
 # ************************** Below is standard code and should not need modification **************************
+
 
 # Runs once when the add-in is initially started
 def run(context):
