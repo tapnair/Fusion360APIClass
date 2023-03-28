@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Simple script demonstrating use of the CAM API"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

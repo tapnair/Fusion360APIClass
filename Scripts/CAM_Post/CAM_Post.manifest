@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Post Process CAM"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

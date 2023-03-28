@@ -1,9 +1,9 @@
 # Author-Patrick Rainsberry
 # Description-Basic Script to create a block
 
-import adsk.cam
 import adsk.core
 import adsk.fusion
+import adsk.cam
 import traceback
 
 
