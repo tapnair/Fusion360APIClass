@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Basic Milling Script from the documentation"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
