@@ -289,12 +289,14 @@ def run(context):
         # add the operation to the folder
         steepAndShallowOp = folder.operations.add(input)
 
-        # check if this toolpath is generatable ("steep_and_shallow" required the manufacturing extension)
+        # check if this toolpath is generatable ("steep_and_shallow" required 
+        # the manufacturing extension)
         isSteepAndShallowGeneratable = False
         for op in setup.operations.compatibleStrategies:
             if op.name == 'steep_and_shallow':
                 if op.isGenerationAllowed:
-                    # isGenerationAllowed will be false if the extension isn't active which prevent from generating the steep_and_shallow operation
+                    # isGenerationAllowed will be false if the extension isn't 
+                    # active which prevent from generating the steep_and_shallow operation
                     isSteepAndShallowGeneratable = True
                 break
 
@@ -373,10 +375,14 @@ def run(context):
 
         # change some post parameter
         postParameters = newProgram.postParameters
+
+        # NcProgram parameters is pass as it is to the postprocessor (it has no units)
         postParameters.itemByName(
-            'builtin_tolerance').value.value = 0.01  # NcProgram parameters is pass as it is to the postprocessor (it has no units)
+            'builtin_tolerance').value.value = 0.01
+
+        #  NcProgram parameters is pass as it is to the postprocessor (it has no units)
         postParameters.itemByName(
-            'builtin_minimumChordLength').value.value = 0.33  # NcProgram parameters is pass as it is to the postprocessor (it has no units)
+            'builtin_minimumChordLength').value.value = 0.33
 
         # update/apply post parameters
         newProgram.updatePostParameters(postParameters)
@@ -402,11 +408,14 @@ def getLibrariesURLs(libraries: adsk.cam.ToolLibraries, url: adsk.core.URL):
     return urls
 
 
-def getToolsFromLibraryByTypeDiameterRangeAndMinFluteLength(toolLibrary: adsk.cam.ToolLibrary, tooltype: str,
-                                                            minDiameter: float, maxDiameter: float,
+def getToolsFromLibraryByTypeDiameterRangeAndMinFluteLength(toolLibrary: adsk.cam.ToolLibrary,
+                                                            tooltype: str,
+                                                            minDiameter: float,
+                                                            maxDiameter: float,
                                                             minimumFluteLength: float = None):
-    ''' Return a list of tools that fits the search '''
+    """ Return a list of tools that fits the search """
     query = toolLibrary.createQuery()
+
     # set the search critera
     query.criteria.add('tool_type', adsk.core.ValueInput.createByString(tooltype))
     query.criteria.add('tool_diameter.min', adsk.core.ValueInput.createByReal(minDiameter))
