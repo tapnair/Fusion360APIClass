@@ -87,5 +87,5 @@ def library_query():
             description = tool.parameters.itemByName('tool_description').value.value
             diameter = tool.parameters.itemByName('tool_diameter').value.value
             app.log(f'Query Result: {description} with diameter {str(diameter)}')
-            adsk.doEvents()
+    
     return tool
