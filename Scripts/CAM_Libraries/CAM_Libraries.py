@@ -45,9 +45,9 @@ def get_tool():
             toolLib = toolLibs.toolLibraryAtURL(libURL)
 
             # Find a specific tool.
-            # for tool in toolLib:
-            #     if tool.parameters.itemByName('tool_description').value.value == '1/16" Ball Endmill':
-                    # return tool
-            # return None
+            for tool in toolLib:
+                if tool.parameters.itemByName('tool_description').value.value == '1/16" Ball Endmill':
+                    return tool
+            return None
 
     return None
