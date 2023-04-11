@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Some example functions for working with Libraries in the MFG workspace."
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
