@@ -1,21 +1,28 @@
-import subprocess
+import json
 
-# def run(user_input_text):
-#     # py_path = os.path.join(sys.exec_prefix, 'bin', 'python')
-#     py_path = os.path.join(sys.exec_prefix, 'python')
-#
-#     subprocess.run(['python3', './api_client/api_client.py'], shell=True, check=True, capture_output=True)
-#     print('Done')
+from api_client.api_client import get_chat_completion
+
+
+# Use this test file to test what will be run in the subprocess
+# Run this file directly in your IDE or python shell, not through Fusion scripts.
+# It can be difficult to debug what is happening in the subprocess otherwise.
+
+TEST_PROMPT = 'Tell me about Fusion 360'
 
 
 if __name__ == '__main__':
     print('Start')
-    # subprocess.run(['python3', '-m', 'venv', 'venv'])
-    # subprocess.run(['source venv/bin/activate'])
-    # subprocess.run(['.', 'venv/bin/activate', 'venv'], shell=True)
-    # subprocess.run(['./venv/bin/pip', 'install', 'requests'])
-    # cmd = ['./venv/bin/pip', 'install', 'requests']
-    # subprocess.run(cmd)
-    # subprocess.run(cmd, capture_output=True, shell=True)
-    subprocess.run(['python3', './api_client/api_client.py'])
+    print('Requesting Chat completion with prompt:')
+    print(TEST_PROMPT)
+    print('This may take a minute...')
+
+    response_string = get_chat_completion(TEST_PROMPT)
+    response = json.loads(response_string)
+    msg = response.get('msg', 'No Message in response')
+    status = response.get('status', 'No Status in response')
+
+    print('Results')
+    print(f'Status: {status}')
+    print('API Response:')
+    print(msg)
     print('Done')

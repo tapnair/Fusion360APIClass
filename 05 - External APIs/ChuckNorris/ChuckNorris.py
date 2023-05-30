@@ -1,5 +1,3 @@
-# Author-Patrick Rainsberry
-# Description-Chuck Norris Jokes using the Requests Package
 
 import os
 import sys
@@ -14,10 +12,15 @@ import adsk.fusion
 from contextlib import ContextDecorator
 from os.path import dirname, abspath
 
-APP_PATH = dirname(abspath(__file__))
+SCRIPT_DIRECTORY = dirname(abspath(__file__))
 
 app = adsk.core.Application.get()
 ui = app.userInterface
+
+# For this to work it is assumed that you have done the following:
+# 1. Open a shell or terminal
+# 2. Navigate to this directory: ".../Fusion360APIClass/05 - External APIs/ChatWithFusion_Subprocess/api_client"
+# 3. Installed the requests library:  pip3 install -t lib --upgrade requests
 
 
 class lib_import(ContextDecorator):
@@ -68,7 +71,7 @@ class lib_import(ContextDecorator):
         return False
 
 
-@lib_import(APP_PATH)
+@lib_import(SCRIPT_DIRECTORY)
 def make_request(url, headers=None):
     import requests
     importlib.reload(requests)

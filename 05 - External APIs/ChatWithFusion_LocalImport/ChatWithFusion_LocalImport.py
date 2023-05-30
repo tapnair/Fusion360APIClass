@@ -1,3 +1,4 @@
+import importlib
 import os
 import sys
 import traceback
@@ -6,12 +7,17 @@ from contextlib import ContextDecorator
 import adsk.cam
 import adsk.core
 import adsk.fusion
+
 from .open_ai_key import open_ai_key
 
-APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
 app = adsk.core.Application.get()
 ui = app.userInterface
+
+# For this to work it is assumed that you have done the following:
+# 1. Open a shell or terminal
+# 2. Navigate to this directory: ".../Fusion360APIClass/05 - External APIs/ChatWithFusion_LocalImport"
+# 3. Installed the openai sdk:  pip3 install -t lib --upgrade openai
 
 
 def run(context):
@@ -22,6 +28,8 @@ def run(context):
         (user_input_text, cancelled) = ui.inputBox(prompt, title, default_value)
         if cancelled:
             return
+
+        app.log('About to call OpenAI API')
 
         api_response = get_chat_completion(user_input_text)
 
@@ -82,10 +90,16 @@ class lib_import(ContextDecorator):
         return False
 
 
-@lib_import(APP_PATH, library_folder='lib')
+SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+
+@lib_import(SCRIPT_DIRECTORY, library_folder='lib')
 def get_chat_completion(user_input_text):
     import openai
+    importlib.reload(openai)
+
     openai.api_key = open_ai_key
+
     try:
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
